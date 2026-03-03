@@ -1120,7 +1120,7 @@
 
                 <h3>03/03/2026</h3>
                 <ul>
-                    <li>Fixed energy and cost figures for electric and gas ovens. Previous figures did not apply the duty cycle factor (ovens cycle on and off once they reach temperature), so energy use was overstated by around 45%. The corrected figures for 30 minutes of use are now 688 Wh (electric) and 825 Wh (gas), rather than 1,250 Wh and 1,500 Wh.</li>
+                    <li>Fixed a bug that showed incorrect cost calculations for gas products (e.g. gas oven and shower) for some country selections.</li>
                 </ul>
 
                 <h3>27/02/2026</h3>
@@ -1723,6 +1723,7 @@
                 electricity: 0.2769,
                 gas: 0.0593,           // 5.93p/kWh ÷ 100
                 petrol: 0.1506,        // £1.34/L ÷ 8.9 kWh/L
+                petrolPerLitre: 1.34,
                 currency: '£',
                 name: 'United Kingdom'
             },
@@ -1730,6 +1731,7 @@
                 electricity: 0.17,
                 gas: 0.047,
                 petrol: 0.0966,        // $0.86/L ÷ 8.9 kWh/L
+                petrolPerLitre: 0.86,
                 currency: '$',
                 name: 'United States'
             },
@@ -1737,6 +1739,7 @@
                 electricity: 0.3835,
                 gas: 0.1216,
                 petrol: 0.1966,        // €1.75/L ÷ 8.9 kWh/L
+                petrolPerLitre: 1.75,
                 currency: '€',
                 name: 'Germany'
             },
@@ -1744,6 +1747,7 @@
                 electricity: 0.2664,
                 gas: 0.1298,
                 petrol: 0.1902,        // €1.693/L ÷ 8.9 kWh/L
+                petrolPerLitre: 1.69,
                 currency: '€',
                 name: 'France'
             },
@@ -1751,6 +1755,7 @@
                 electricity: 0.2654,
                 gas: 0.2128,
                 petrol: 0.1638,        // €1.458/L ÷ 8.9 kWh/L
+                petrolPerLitre: 1.46,
                 currency: '€',
                 name: 'Sweden'
             },
@@ -1758,6 +1763,7 @@
                 electricity: 0.2608,
                 gas: 0.0859,
                 petrol: 0.1643,        // €1.462/L ÷ 8.9 kWh/L
+                petrolPerLitre: 1.46,
                 currency: '€',
                 name: 'Spain'
             },
@@ -1765,6 +1771,7 @@
                 electricity: 0.1986,
                 gas: 0.012,
                 petrol: 0.2131,        // €1.897/L ÷ 8.9 kWh/L
+                petrolPerLitre: 1.90,
                 currency: '€',
                 name: 'Norway'
             },
@@ -1772,6 +1779,7 @@
                 electricity: 0.2342,
                 gas: 0.1617,
                 petrol: 0.2276,        // €2.026/L ÷ 8.9 kWh/L
+                petrolPerLitre: 2.03,
                 currency: '€',
                 name: 'Netherlands'
             },
@@ -1779,6 +1787,7 @@
                 electricity: 0.0617,
                 gas: 0.0209,
                 petrol: 0.1238,        // €1.102/L ÷ 8.9 kWh/L
+                petrolPerLitre: 1.10,
                 currency: '€',
                 name: 'Türkiye'
             }
@@ -2044,7 +2053,7 @@
             if (getViewMode() === 'cost') {
                 const prices = getCountryPrices();
                 const c = prices.currency;
-                notes.push(`Note: Assumes ${c}${prices.electricity.toFixed(2)} for electricity, ${c}${prices.gas.toFixed(2)} for gas, and ${c}${prices.petrol.toFixed(2)} for petrol per kWh.`);
+                notes.push(`Note: Assumes ${c}${prices.electricity.toFixed(2)} for electricity, ${c}${prices.gas.toFixed(2)} for gas, and ${c}${prices.petrolPerLitre.toFixed(2)} for petrol per litre.`);
             }
 
             products.forEach((product, index) => {
