@@ -1288,6 +1288,7 @@
                         const checkbox = document.getElementById(`check-${index}`);
                         if (checkbox && checkbox.checked) {
                             handleStreamingDependencies(index, true);
+                            syncWifiHours(index);
                         }
                     }
                 });
@@ -1444,14 +1445,18 @@
                 case 'hours':
                     const defaultHours = Math.floor(product.default_value);
                     const defaultMinutes = Math.round((product.default_value % 1) * 60);
+                    const isStreaming = product.name === 'Streaming Netflix' || product.name === 'Streaming YouTube';
+                    const hoursOnchange = isStreaming
+                        ? `syncWifiHours(${index}); updateChart(); updateURL()`
+                        : `updateChart(); updateURL()`;
                     return `
                         <div class="input-row">
                             <div class="input-group">
-                                <input type="number" id="input1-${index}" min="0" max="24" value="${defaultHours}" onchange="updateChart(); updateURL()">
+                                <input type="number" id="input1-${index}" min="0" max="24" value="${defaultHours}" onchange="${hoursOnchange}">
                                 <label>hours</label>
                             </div>
                             <div class="input-group">
-                                <input type="number" id="input2-${index}" min="0" max="59" value="${defaultMinutes}" onchange="updateChart(); updateURL()">
+                                <input type="number" id="input2-${index}" min="0" max="59" value="${defaultMinutes}" onchange="${hoursOnchange}">
                                 <label>minutes</label>
                             </div>
                         </div>
@@ -1539,6 +1544,22 @@
                     }
                 }
             }
+        }
+
+        function syncWifiHours(streamingIndex) {
+            // Keep Home internet hours in sync when streaming service hours change
+            const wifiIndex = products.findIndex(p => p.name === 'Home internet (WiFi)');
+            if (wifiIndex === -1) return;
+            const wifiCheckbox = document.getElementById(`check-${wifiIndex}`);
+            if (!wifiCheckbox || !wifiCheckbox.checked) return;
+
+            const streamingHours = document.getElementById(`input1-${streamingIndex}`);
+            const streamingMinutes = document.getElementById(`input2-${streamingIndex}`);
+            const wifiHours = document.getElementById(`input1-${wifiIndex}`);
+            const wifiMinutes = document.getElementById(`input2-${wifiIndex}`);
+
+            if (streamingHours && wifiHours) wifiHours.value = streamingHours.value;
+            if (streamingMinutes && wifiMinutes) wifiMinutes.value = streamingMinutes.value;
         }
 
         function handleCheckboxChange(index) {
